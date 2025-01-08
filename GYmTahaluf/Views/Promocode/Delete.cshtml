@@ -1,0 +1,23 @@
+﻿@model GYmTahaluf.Models.Promocode
+
+@{
+    ViewData["Title"] = "Delete Promocode";
+}
+
+<h1>Delete Promocode</h1>
+
+<h3>Are you sure you want to delete this promocode?</h3>
+
+<div>
+    <h4>Promocode: @Model.Code</h4>
+    <p>Percent: @Model.Percent</p>
+    <p>End Date: @Model.EndDate?.ToString("g")</p>
+    <p>Min Amount: @Model.MinAmount</p>
+    <p>Max Uses: @Model.MaxUses</p>
+    <p>Visible: @Model.Isvisible</p>
+</div>
+
+<form method="post">
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a href="@Url.Action("Index")" class="btn btn-secondary">Back to List</a>
+</form>

@@ -1,0 +1,50 @@
+﻿@model GYmTahaluf.Models.Testimonial
+
+@{
+    ViewData["Title"] = "Edit Testimonial";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<h1>Edit Testimonial</h1>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit">
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="User.UserName" class="control-label">User</label>
+                <input asp-for="User.UserName" class="form-control" readonly />
+            </div>
+            <div class="form-group">
+                <label asp-for="Rate" class="control-label">Rate</label>
+                <input asp-for="Rate" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Text" class="control-label">Text</label>
+                <textarea asp-for="Text" class="form-control"></textarea>
+            </div>
+            <div class="form-group">
+                <label asp-for="Isadminreview" class="control-label">Admin Review</label>
+                <select asp-for="Isadminreview" class="form-control">
+                    <option value="true">Approved</option>
+                    <option value="false">Not Approved</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Priority" class="control-label">Priority</label>
+                <select asp-for="Priority" class="form-control">
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>

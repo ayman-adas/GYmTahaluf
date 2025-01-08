@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Page>
+
+@{
+    ViewData["Title"] = "Pages Management";
+        Layout = "~/Views/Shared/AdminLayout.cshtml";
+ 
+}
+
+<h1>Pages Management</h1>
+<a asp-action="Create" class="btn btn-primary">Create New Page</a>
+
+<table class="table table-striped mt-3">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Name</th>
+            <th>Last Updated</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+      @if (Model != null && Model.Any())
+{
+    foreach (var pages in Model)
+    {
+        <tr>
+            <td>@pages.Id</td>
+            <td>@pages.Title</td>
+            <td>@pages.Name</td>
+            <td>@pages.UpdatedAt?.ToString("g")</td>
+            <td>
+                <a asp-action="Details" asp-route-id="@pages.Id" class="btn btn-info btn-sm">View</a>
+                <a asp-action="Edit" asp-route-id="@pages.Id" class="btn btn-warning btn-sm">Edit</a>
+                <a asp-action="Delete" asp-route-id="@pages.Id" class="btn btn-danger btn-sm">Delete</a>
+            </td>
+        </tr>
+    }
+}
+else
+{
+    <tr>
+        <td colspan="5">No pages found.</td>
+    </tr>
+}
+    </tbody>
+</table>

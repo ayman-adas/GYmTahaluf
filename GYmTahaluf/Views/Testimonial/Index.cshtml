@@ -1,0 +1,42 @@
+﻿@model IEnumerable<GYmTahaluf.Models.Testimonial>
+
+@{
+    ViewData["Title"] = "Testimonials Management";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<h1>Testimonials Management</h1>
+<hr />
+
+<div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Rate</th>
+                <th>Text</th>
+                <th>Admin Review</th>
+                <th>Priority</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var testimonial in Model)
+            {
+                bool isAdminReview = testimonial.Isadminreview??false;
+                <tr>
+                    <td>@testimonial.User.UserName</td>
+                    <td>@testimonial.Rate</td>
+                    <td>@testimonial.Text</td>
+                    <td>@(isAdminReview ? "Yes" : "No")</td>
+                    <td>@testimonial.Priority</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@testimonial.Id" class="btn btn-info">Details</a>
+                        <a asp-action="Edit" asp-route-id="@testimonial.Id" class="btn btn-warning">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@testimonial.Id" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

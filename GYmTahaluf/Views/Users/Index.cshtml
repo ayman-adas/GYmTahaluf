@@ -1,0 +1,65 @@
+﻿@model IEnumerable<User> 
+
+@{
+    ViewData["Title"] = "User Management";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1 class="page-title">User Management</h1>
+        <div class="actions">
+            <a asp-action="Create" class="btn btn-primary">Create New User</a>
+        </div>
+
+        <!-- User Table -->
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Any())
+                {
+                    int index = 1;
+                    foreach (var user in Model)
+                    {
+                        <tr>
+                            <td>@index</td>
+                            <td>@user.UserName</td>
+                            <td>@user.Email</td>
+                            <td>@user.RoleId</td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@user.Id" class="btn btn-warning">Edit</a>
+                                <a asp-action="Delete" asp-route-id="@user.Id" class="btn btn-danger">Delete</a>
+                            </td>
+                        </tr>
+                        index++;
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5" class="text-center">No users found.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

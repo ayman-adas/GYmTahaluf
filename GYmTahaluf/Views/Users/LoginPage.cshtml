@@ -1,0 +1,43 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "Login and Sign Up";
+}
+
+@model User
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Slide Navbar</title>
+    <link rel="stylesheet" type="text/css" href="~/Login/style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="main">
+        <input type="checkbox" id="chk" aria-hidden="true">
+
+        <div class="signup">
+            <form method="post" asp-action="Register">
+                <label for="chk" aria-hidden="true">Sign up</label>
+                <input type="text" asp-for="UserName" name="UserName" placeholder="User name" required />
+                <input type="email" asp-for="Email" name="Email" placeholder="Email" required />
+                <input type="password" asp-for="Password" name="Password" placeholder="Password" required />
+                    <input asp-for="imageFile"  />
+                    <span asp-validation-for="imageFile"></span>
+               
+                <button type="submit">Sign up</button>
+            </form>
+        </div>
+        <hr />
+        <hr />
+        <div class="login">
+            <form method="post" asp-action="Login">
+                <label for="chk" aria-hidden="true">Login</label>
+                <input type="text" asp-for="UserName" placeholder="UserName" required />
+                <input type="password" asp-for="Password" placeholder="Password" required />
+                <button type="submit" class="form-submit">Login</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,41 @@
+﻿@model GYmTahaluf.Models.Promocode
+
+@{
+    ViewData["Title"] = "Edit Promocode";
+}
+
+<h1>Edit Promocode</h1>
+
+<form method="post">
+    <div class="form-group">
+        <label for="Code">Code</label>
+        <input type="text" name="Code" class="form-control" value="@Model.Code" required />
+    </div>
+
+    <div class="form-group">
+        <label for="Percent">Percent</label>
+        <input type="number" name="Percent" class="form-control" value="@Model.Percent" />
+    </div>
+
+    <div class="form-group">
+        <label for="EndDate">End Date</label>
+        <input type="date" name="EndDate" class="form-control" value="@Model.EndDate?.ToString("yyyy-MM-dd")" />
+    </div>
+
+    <div class="form-group">
+        <label for="Isvisible">Is Visible</label>
+        <input type="checkbox" name="Isvisible" class="form-check-input" @(Model.Isvisible == true ? "checked" : "") />
+    </div>
+
+    <div class="form-group">
+        <label for="MinAmount">Min Amount</label>
+        <input type="number" name="MinAmount" class="form-control" value="@Model.MinAmount" />
+    </div>
+
+    <div class="form-group">
+        <label for="MaxUses">Max Uses</label>
+        <input type="number" name="MaxUses" class="form-control" value="@Model.MaxUses" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>

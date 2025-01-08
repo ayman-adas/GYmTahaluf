@@ -1,0 +1,29 @@
+﻿@using restruarntmvc.Models
+
+@{
+    ViewData["Title"] = "JoinTables";
+}
+@model IEnumerable<JoinTables>
+
+<table>
+    <thead>
+        <tr>
+            <th>First name</th>
+            <th>Last name</th>
+            <th> product name</th>
+            <th> product quantity</th>
+            <th> category name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Customer.Fname</td>
+                <td>@item.Customer.Lname </td>
+                <td>@item.Product.Namee</td>
+                <td>@item.ProductCustomer.Quantity</td>
+                <td>@item.Category.CategoryName</td>
+        </tr>}
+    </tbody>
+</table>

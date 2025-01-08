@@ -1,0 +1,17 @@
+﻿@model Page
+
+@{
+    ViewData["Title"] = "Page Details";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+
+}
+
+<h1>@Model.Title</h1>
+<p><strong>Name:</strong> @Model.Name</p>
+<p><strong>Content:</strong></p>
+<p>@Model.Content</p>
+<p><strong>Last Updated:</strong> @Model.UpdatedAt?.ToString("g")</p>
+
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+<a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>

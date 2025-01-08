@@ -1,0 +1,300 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f5f7;
+        }
+        /* Header Styling */
+        .navbar {
+            background-color: #007bff;
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .navbar .user-icon {
+            font-size: 20px;
+            cursor: pointer;
+        }
+        /* Sidebar Styling */
+        .sidebar {
+            background-color: #343a40;
+            color: white;
+            height: 100vh;
+            width: 200px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 1rem;
+        }
+        .sidebar h3 {
+            color: white;
+        }
+        .sidebar ul {
+            padding: 0;
+            list-style-type: none;
+        }
+        .sidebar ul li {
+            padding: 10px;
+            cursor: pointer;
+        }
+        .sidebar ul li:hover {
+            background-color: #007bff;
+        }
+        .content {
+            margin-left: 200px;
+            padding: 2rem;
+        }
+        /* Card and Table Styling */
+        .card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .chart-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        /* Footer Styling */
+        .footer {
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="navbar">
+        <div class="logo">Admin Dashboard</div>
+        <div class="user-icon">
+            <i class="fas fa-user-circle"></i>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h3>Menu</h3>
+        <ul>
+            <li>Dashboard</li>
+            <li>Users</li>
+            <li>Reports</li>
+            <li>Settings</li>
+            <li>Logout</li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+        <div style="text-align: center;">
+            <h1>Welcome, Admin</h1>
+    </div>
+
+        <!-- Monthly Sales Chart -->
+
+        <div class="card">
+        <div style="text-align: center;">
+
+            <h2>Monthly Sales</h2>
+            </div>
+            <div class="chart-container">
+                <canvas id="salesChart"></canvas>
+            </div>
+        </div>
+
+        <!-- User Engagement Chart -->
+
+        <div class="card">
+        <div style="text-align: center;">
+
+            <h2>User Engagement</h2>
+            </div>
+            <div class="chart-container">
+                <canvas id="engagementChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Sales by Region Chart -->
+        <div class="card">
+        <div style="text-align: center;">
+
+            <h2>Sales by Region</h2>
+            </div>
+            <div class="chart-container">
+                <canvas id="regionChart"></canvas>
+            </div>
+        </div>
+
+        <!-- User Data Table -->
+        <div class="card">
+            <h2>Registered Users</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>John Doe</td>
+                        <td>johndoe@example.com</td>
+                        <td>Active</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Jane Smith</td>
+                        <td>janesmith@example.com</td>
+                        <td>Inactive</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Mark Johnson</td>
+                        <td>markj@example.com</td>
+                        <td>Active</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        &copy; 2025 Admin Dashboard. All Rights Reserved.
+    </div>
+
+    <script>
+        // Fetch the sales data from the API endpoint
+        fetch('http://localhost:5000/api/sales') // Replace with your actual API URL
+            .then(response => response.json())
+            .then(data => {
+                // Monthly Sales Bar Chart
+                const salesConfig = {
+                    type: 'bar',
+                    data: {
+                        labels: data.labels,
+                        datasets: data.datasets
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            title: {
+                                display: true,
+                                text: 'Monthly Sales Data'
+                            }
+                        }
+                    },
+                };
+                const salesCtx = document.getElementById('salesChart').getContext('2d');
+                new Chart(salesCtx, salesConfig);
+            })
+            .catch(error => console.error('Error fetching data:', error));
+
+        // Sample User Engagement Line Chart
+        const engagementData = {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+            datasets: [{
+                label: 'User Engagement',
+                data: [200, 450, 300, 600, 500, 750],
+                fill: false,
+                borderColor: 'rgba(255, 99, 132, 1)',
+                tension: 0.1
+            }]
+        };
+
+        const engagementConfig = {
+            type: 'line',
+            data: engagementData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'User Engagement Over Time'
+                    }
+                }
+            },
+        };
+
+        const engagementCtx = document.getElementById('engagementChart').getContext('2d');
+        new Chart(engagementCtx, engagementConfig);
+
+        // Sample Sales by Region Pie Chart
+        const regionData = {
+            labels: ['North America', 'Europe', 'Asia', 'Africa', 'Australia'],
+            datasets: [{
+                data: [300, 150, 200, 100, 50],
+                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#F7464A'],
+                hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#F7464A']
+            }]
+        };
+
+        const regionConfig = {
+            type: 'pie',
+            data: regionData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Sales Distribution by Region'
+                    }
+                }
+            },
+        };
+
+        const regionCtx = document.getElementById('regionChart').getContext('2d');
+        new Chart(regionCtx, regionConfig);
+    </script>
+</body>
+</html>

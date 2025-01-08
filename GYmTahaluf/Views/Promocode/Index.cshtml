@@ -1,0 +1,46 @@
+﻿@model IEnumerable<GYmTahaluf.Models.Promocode>
+
+@{
+    ViewData["Title"] = "Promocode List";
+}
+
+<h1>Promocode List</h1>
+
+<p>
+    <a href="@Url.Action("Create")" class="btn btn-primary">Create New Promocode</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Code</th>
+            <th>Created At</th>
+            <th>Percent</th>
+            <th>End Date</th>
+            <th>Is Visible</th>
+            <th>Min Amount</th>
+            <th>Max Uses</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var promocode in Model)
+        {
+            <tr>
+                <td>@promocode.Id</td>
+                <td>@promocode.Code</td>
+                <td>@promocode.CreatedAt?.ToString("g")</td>
+                <td>@promocode.Percent</td>
+                <td>@promocode.EndDate?.ToString("g")</td>
+                <td>@promocode.Isvisible</td>
+                <td>@promocode.MinAmount</td>
+                <td>@promocode.MaxUses</td>
+                <td>
+                    <a href="@Url.Action("Edit", new { id = promocode.Id })" class="btn btn-warning btn-sm">Edit</a> |
+                    <a href="@Url.Action("Delete", new { id = promocode.Id })" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
