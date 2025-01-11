@@ -10,6 +10,7 @@ namespace GYmTahaluf
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddDbContext<ModelContext>(options =>
                options.UseOracle(builder.Configuration.GetConnectionString("RestaurantConnection")));
+            builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 
             builder.Services.AddSession(options => {
 

@@ -1,0 +1,114 @@
+﻿
+@{
+    Layout = null;
+}
+@model SubscriptionPlan
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscription Plans</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body {
+            background-color: #f4f6f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .card {
+            margin-bottom: 30px;
+            border: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .card-title {
+            font-size: 1.5rem;
+            color: #333;
+        }
+        .card-body {
+            padding: 30px;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+
+
+
+        <div class="card-header  text-white text-center" style="background-color: orangered;">
+            <h3>@Model.Title</h3>
+                        </div>
+                        <div class="card-body">
+                    <p><strong>Description:</strong> @Model.Descriptions</p>
+                    <p><strong>UserName:</strong> @Model.Trainer?.UserName</p>
+                    <p><strong>Number of days in week:</strong> @Model.DaysInWeek</p>
+
+                    <p><strong>Goal:</strong> @Model.Goal</p>
+                    <p><strong>Start Date:</strong> @Model.StartDate</p>
+                    <p><strong>End Date:</strong> @Model.EndDate</p>
+
+                    <p><strong>Price:</strong> $@Model.Price</p>
+                            <h5>Included Exercises:</h5>
+                            <ul>
+                        @foreach (var exercise in Model.Exercises)
+                                {
+                                    <li>@exercise.Title - @exercise.Repetition</li>
+                                }
+                            </ul>
+            <div class="form-group">
+                <form asp-action="CreateSubscription" asp-route-planId="@Model.Id"
+                      asp-route-userId="@ViewBag.UserId" method="post">
+                    <div class="form-group">
+                        <label for="StartDay">Start Day</label>
+                        <select class="form-control" id="StartDay" name="StartDay"  required>
+                            <option  value="Sunday">Sunday</option>
+                            <option value="Monday">Monday</option>
+                            <option value="Tuesday">Tuesday</option>
+                            <option value="Wednesday">Wednesday</option>
+                            <option value="Thursday">Thursday</option>
+                            <option value="Friday">Friday</option>
+                            <option value="Saturday">Saturday</option>
+                        </select>
+                    </div>
+
+                    <!-- Start Time -->
+                    <div class="form-group">
+                        <label for="StartTime">Start Time</label>
+                        <input type="time" class="form-control" id="StartTime" name="StartTime" asp-route-StartTime="StartTime" required />
+                    </div>
+
+                    <!-- Visa Details -->
+                    <div class="form-group">
+                        <label for="VisaDetails">Visa Details</label>
+                        <input type="text" class="form-control" id="VisaDetails" name="VisaDetails" asp-route-VisaDetails="VisaDetails" placeholder="Enter Visa Number" required />
+                    </div>
+
+                    <!-- Promo Code (Optional) -->
+                    <div class="form-group">
+                        <label for="PromoCode">Promo Code (Optional)</label>
+                        <input type="text" class="form-control" id="PromoCode" name="PromoCode" asp-route-PromoCode="PromoCode" placeholder="Enter Promo Code" />
+                    </div>
+                    <input type="hidden" name="userId" value="@ViewBag.UserId" />
+                    <input type="hidden" name="planId" value="@Model.Id" />
+
+                    <button type="submit"
+                           
+                            class="btn btn-primary w-100"
+                            style="background-color: orangered">
+                        Subscribe Now
+                    </button>
+                </form>
+        </div>
+                    </div>
+        
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

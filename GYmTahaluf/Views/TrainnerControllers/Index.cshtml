@@ -1,0 +1,102 @@
+﻿@model TrainerDashboard
+@{
+    Layout = "~/Views/Shared/TrainnerLayout.cshtml";
+
+}
+<div class="row">
+    <!-- Statistics Section -->
+    <div class="col-md-4 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <p class="card-title">Key Statistics</p>
+                <div class="statistics">
+                    <div class="stat-item">
+                        <p>Total Registered Members: @Model.Members.Count()</p>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <p>Total Revenue: @Model.TotalPayment</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+    <div class="row">
+        <!-- Top Plans Table -->
+        <div class="col-md-7 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-title mb-0">Top Plans</p>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-borderless">
+                            <thead>
+                                <tr>
+                                    <th>Plan Title</th>
+                                    <th>Price</th>
+                                    <th>Trainer Name</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Plans)
+                                {
+                                    <tr>
+                                        <td>@item.Title</td>
+                                        <td class="font-weight-bold">@item.Price</td>
+                                        <td class="font-weight-medium">
+                                            <div class="badge badge-success">@item.Descriptions</div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+      
+        <!-- Users Table -->
+        <div class="col-md-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-title">Users Table</p>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="table-responsive">
+                                <table id="example" class="display expandable-table" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Email</th>
+                                            <th>Image</th>
+                                            <th>User Name</th>
+                                           
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.Members)
+                                        {
+                                            <tr>
+                                                <td>@item.Email</td>
+                                                <td>
+                                                    <img src="@Url.Content("~/Images/" + item.UserImage)" style="border-radius:20%;" width="100" height="100" />
+                                                </td>
+                                                <td>@item.UserName</td>
+            
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

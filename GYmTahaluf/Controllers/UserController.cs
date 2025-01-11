@@ -84,8 +84,8 @@ public class UsersController : Controller
         Console.WriteLine(user.Email);
             User login = new User();
             login.UserName = user.UserName;
-            login.Password = user.Password;
-            login.Email = user.Email;
+            login.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+        login.Email = user.Email;
             login.RoleId = 3;
             login.CreatedAt = DateTime.Now;
             login.UpdateAt = DateTime.Now;
@@ -93,19 +93,17 @@ public class UsersController : Controller
             _context.Add(login);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Login");
+            return RedirectToAction("LoginPage");
     
     }
     [HttpPost]
-	public IActionResult Login([Bind("UserName , Password ")]
-User userLogin)
+	public IActionResult Login(string Email,string Password)
 
 	{
 
-        var auth = _context.Users
-        .SingleOrDefault(x => x.UserName == userLogin.UserName && x.Password == userLogin.Password);
+        var auth = _context.Users.Single(x => x.Email ==Email);
 
-        if (auth != null)
+        if ( BCrypt.Net.BCrypt.Verify(Password, auth.Password))
 
 		{ // 1 > customer
 
@@ -124,26 +122,27 @@ User userLogin)
 
 					return RedirectToAction("Index", "Admin");
 
-				case 2:
-					HttpContext.Session.SetInt32("CustomerId", (int)auth.Id);
+				case 3:
+					HttpContext.Session.SetInt32("MemberId", (int)auth.Id);
 
-					return RedirectToAction("Index", "Home");
+                    return RedirectToAction("MemberHome", "Home", new { userId = auth.Id });
 
-			}
+            }
 
-		}
+        }
 
-		return View();
+        return RedirectToAction("LoginPage");
 
-	}
+    }
 
 
-	[HttpPost]
+    [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([Bind("Id,Username,Email,Password,RoleId")] User user)
     {
         if (ModelState.IsValid)
         {
+            user.Password= BCrypt.Net.BCrypt.HashPassword(user.Password);
             _context.Add(user);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -179,6 +178,11 @@ User userLogin)
         {
             try
             {
+                var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+                if (existingUser.Password != user.Password) {
+                    user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+
+                }
                 _context.Update(user);
                 await _context.SaveChangesAsync();
             }
@@ -191,7 +195,7 @@ User userLogin)
                 else
                 {
                     throw;
-                }
+                }   
             }
             return RedirectToAction(nameof(Index));
         }

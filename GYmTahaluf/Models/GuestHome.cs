@@ -2,8 +2,9 @@
 {
    public class TestimonialTrainerViewModel
     {
-        public List<Testimonial> Testimonials { get; set; }
-        public List<User> Trainers { get; set; }
+        public List<SubscriptionPlan> Plans { get; set; }
+        public List<Testimonial> Testimonial { get; set; }
+        public Contact Contact { get; set; }
     }
 
 }

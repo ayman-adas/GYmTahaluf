@@ -5,6 +5,75 @@
 @model TestimonialTrainerViewModel;
 <!DOCTYPE html>
 <html lang="en">
+<style>
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        padding: 20px;
+        background: #f9f9f9;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Feature Card */
+    .feature-card {
+        display: flex;
+        align-items: center;
+        background: #fff;
+        border-radius: 10px;
+        padding: 15px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+    /* Left Icon */
+    .left-icon img {
+        width: 50px;
+        height: 50px;
+        margin-right: 15px;
+    }
+
+    /* Right Content */
+    .right-content {
+        flex: 1;
+    }
+
+        .right-content h4 {
+            font-size: 18px;
+            margin: 0 0 5px;
+            color: #333;
+            font-weight: bold;
+        }
+
+    .trainer-name {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 10px;
+    }
+
+    /* Text Button */
+    .text-button {
+        display: inline-block;
+        padding: 8px 15px;
+        font-size: 14px;
+        color: #fff;
+        background: #007bff;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: background 0.3s;
+    }
+
+        .text-button:hover {
+            background: #0056b3;
+        }
+</style>
 
   <head>
 
@@ -56,7 +125,7 @@ https://templatemo.com/tm-548-training-studio
                 <div class="col-12">
                     <nav class="main-nav">
                         <!-- ***** Logo Start ***** -->
-                        <a href="index.html" class="logo">Training<em> Studio</em></a>
+                        <a  class="logo">Ayman<em> Studio</em></a>
                         <!-- ***** Logo End ***** -->
                         <!-- ***** Menu Start ***** -->
                         <ul class="nav">
@@ -105,46 +174,66 @@ https://templatemo.com/tm-548-training-studio
                         <p>Welcome to Ayman's Fitness Hub, where we are dedicated to providing high-quality fitness services and helping individuals reach their health goals. Join us and take your fitness journey to the next level. Created by Ayman, this hub is designed with fitness enthusiasts in mind.</p>
                     </div>
                 </div>
-                <div class="col-lg-6">
-                    @foreach (var item in Model.Testimonials)
-                    {
-                        <ul class="features-items">
+                <div class="col-lg-4">
+                    <ul class="features-items" >
+    @foreach (var item in Model.Plans.Take(Model.Plans.Count / 2))
+                        {
                             <li class="feature-item">
-                                <div class="left-icon">
-                                    <img src="~/GuestHome/assets/images/line-dec.png" alt="waves">
-                                </div>
-                                <div class="right-content">
-                                    <h4>@item.Rate</h4>
-                                    <p>@item.Text</p>
+                                <div class="feature-card">
+                                    <div class="left-icon">
+                                        <img src="~/GuestHome/assets/images/features-first-icon.png" alt="training fifth">
+                                    </div>
+                                    <div class="right-content">
+                                        <h4>@item.Title</h4>
+                                        <p class="trainer-name">Trainer: @item.Trainer?.UserName</p>
+                                        <a asp-controller="Users" asp-action="LoginPage" class="text-button">Discover More</a>
+                                    </div>
                                 </div>
                             </li>
-                        </ul>
-                    }
+                        }
+                    </ul>
                 </div>
-                <div class="col-lg-6">
-                    @foreach (var item in Model.Testimonials)
-                    {
-                        <ul class="features-items">
+                 <div class="col-lg-4">
+                    <ul class="features-items" >
+@foreach (var item in Model.Plans.Skip(Model.Plans.Count / 2))
+                        {
                             <li class="feature-item">
-                                <div class="left-icon">
-                                    <img src="~/GuestHome/assets/images/features-first-icon.png" alt="training fifth">
-                                </div>
-                                <div class="right-content">
-                                    <h4>@item.Rate</h4>
-                                    <p>@item.Text</p>
+                                <div class="feature-card">
+                                    <div class="left-icon">
+                                        <img src="~/GuestHome/assets/images/features-first-icon.png" alt="training fifth">
+                                    </div>
+                                    <div class="right-content">
+                                        <h4>@item.Title</h4>
+                                        <p class="trainer-name">Trainer: @item.Trainer?.UserName</p>
+                                        <a asp-controller="Users" asp-action="LoginPage" class="text-button">Discover More</a>
+                                    </div>
                                 </div>
                             </li>
-                        </ul>
-                    }
+                        }
+                    </ul>
                 </div>
 
-            </div>
+        </div>
         </div>
     </section>
     <!-- ***** Features Item End ***** -->
 
     <!-- ***** Call to Action Start ***** -->
-   
+    <section class="section" id="call-to-action">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 offset-lg-1">
+                    <div class="cta-content">
+                        <h2>Don’t <em>think</em>, begin <em>today</em>!</h2>
+                        <p>Ut consectetur, metus sit amet aliquet placerat, enim est ultricies ligula, sit amet dapibus odio augue eget libero. Morbi tempus mauris a nisi luctus imperdiet.</p>
+                        <div class="main-button scroll-to-section">
+                            <a asp-controller="Users" asp-action="LoginPage">Become a member</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
     <!-- ***** Call to Action End ***** -->
 
     
@@ -154,7 +243,7 @@ https://templatemo.com/tm-548-training-studio
             <div class="row">
                 <div class="col-lg-6 offset-lg-3">
                     <div class="section-heading">
-                        <h2>Expert <em>Trainers</em></h2>
+                        <h2>Our <em>Feedback</em></h2>
                         <img src="~/GuestHome/assets/images/line-dec.png" alt="">
                         <p>Nunc urna sem, laoreet ut metus id, aliquet consequat magna. Sed viverra ipsum dolor, ultricies fermentum massa consequat eu.</p>
                     </div>
@@ -163,18 +252,18 @@ https://templatemo.com/tm-548-training-studio
             <div class="row">
                
 <div class="row">
-    @foreach (var trainer in Model.Trainers)
+                    @foreach (var testimonial in Model.Testimonial)
     {
         <div class="col-lg-4">
             <div class="trainer-item">
                 <div class="image-thumb">
                     <!-- Assuming the trainer has an image URL field -->
-                    <img src="@trainer.UserImage" alt="@trainer.UserName">
+                                    <img src="@testimonial.User.UserImage" alt="@testimonial.User.UserName">
                 </div>
                 <div class="down-content">
              
-                    <h4>@trainer.UserName</h4>
-                    <p>@trainer.Email</p> <!-- Assuming you have a Description field for trainers -->
+                    <h4>@testimonial.Text</h4>
+                    <p>@testimonial.Rate</p> <!-- Assuming you have a Description field for trainers -->
                     <ul class="social-icons">
                       
                     </ul>
@@ -190,46 +279,10 @@ https://templatemo.com/tm-548-training-studio
     <!-- ***** Contact Us Area Starts ***** -->
     <section class="section" id="contact-us">
         <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-6 col-md-6 col-xs-12">
                     <div id="map">
                       <iframe src="https://maps.google.com/maps?q=Av.+L%C3%BAcio+Costa,+Rio+de+Janeiro+-+RJ,+Brazil&t=&z=13&ie=UTF8&iwloc=&output=embed" width="100%" height="600px" frameborder="0" style="border:0" allowfullscreen></iframe>
-                    </div>
                 </div>
-                <div class="col-lg-6 col-md-6 col-xs-12">
-                    <div class="contact-form">
-                        <form id="contact" action="" method="post">
-                          <div class="row">
-                            <div class="col-md-6 col-sm-12">
-                              <fieldset>
-                                <input name="name" type="text" id="name" placeholder="Your Name*" required="">
-                              </fieldset>
-                            </div>
-                            <div class="col-md-6 col-sm-12">
-                              <fieldset>
-                                <input name="email" type="text" id="email"  placeholder="Your Email*" required="">
-                              </fieldset>
-                            </div>
-                            <div class="col-md-12 col-sm-12">
-                              <fieldset>
-                                <input name="subject" type="text" id="subject" placeholder="Subject">
-                              </fieldset>
-                            </div>
-                            <div class="col-lg-12">
-                              <fieldset>
-                                <textarea name="message" rows="6" id="message" placeholder="Message" required=""></textarea>
-                              </fieldset>
-                            </div>
-                            <div class="col-lg-12">
-                              <fieldset>
-                                <button type="submit" id="form-submit" class="main-button">Send Message</button>
-                              </fieldset>
-                            </div>
-                          </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+                
         </div>
     </section>
     <!-- ***** Contact Us Area Ends ***** -->
@@ -240,21 +293,19 @@ https://templatemo.com/tm-548-training-studio
             <div class="row">
                 <div class="col-lg-12">
                     <p>
-                        Copyright &copy; 2020 Training Studio
+                        Copyright &copy; 2025 Ayman Training Studio
 
-                        - Designed by <a rel="nofollow" href="https://templatemo.com" class="tm-text-link" target="_parent">TemplateMo</a><br>
-
-                        Distributed by <a rel="nofollow" href="https://themewagon.com" class="tm-text-link" target="_blank">ThemeWagon</a>
+                     
 
                     </p>
 
                     <div class="contact-info">
                         <p>Contact Us:</p>
                         <ul class="social-icons">
-                            <li><a href="mailto:contact@trainingstudio.com" title="Email"><i class="fa fa-envelope"></i> Email</a></li>
-                            <li><a href="tel:+1234567890" title="Phone"><i class="fa fa-phone"></i> +1 (234) 567-890</a></li>
-                            <li><a href="https://www.instagram.com/trainingstudio" target="_blank" title="Instagram"><i class="fa fa-instagram"></i> Instagram</a></li>
-                            <li><a href="https://www.facebook.com/trainingstudio" target="_blank" title="Facebook"><i class="fa fa-facebook"></i> Facebook</a></li>
+                            <li><a href="mailto:@Model.Contact.Email" title="Email"><i class="fa fa-envelope"></i> @Model.Contact.Email</a></li>
+                            <li><a href="tel:@Model.Contact.Phone" title="Phone"><i class="fa fa-phone"></i> @Model.Contact.Phone</a></li>
+                            <li><a href=@Model.Contact.Insta target="_blank" title="Instagram"><i class="fa fa-instagram"></i> @Model.Contact.Insta</a></li>
+                            <li><a href="@Model.Contact.Facebook" target="_blank" title="Facebook"><i class="fa fa-facebook"></i> @Model.Contact.Facebook</a></li>
                         </ul>
                     </div>
                     

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GYmTahaluf.Models;
 
@@ -24,7 +25,8 @@ public partial class Testimonial
     public string? Image { get; set; }
 
     public decimal? TrainerId { get; set; }
-
+    [NotMapped]
+    public virtual IFormFile imageFile { get; set; }
     public bool? Isdeleted { get; set; }
 
     public DateTime? UpdatedAt { get; set; }

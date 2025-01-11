@@ -24,80 +24,51 @@
         </div>
     </div>
 
-    <!-- Monthly Report Chart -->
-    <div class="col-md-8 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <p class="card-title">Monthly Subscription Report</p>
-                <canvas id="monthlyChart"></canvas>
-                <script>
-                    var ctx = document.getElementById('monthlyChart').getContext('2d');
-                    var monthlyData = @Html.Raw(Json.Serialize(Model.MonthlySubscriptionReport));
 
-                    var chart = new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels: monthlyData.map(item => `${item.Month}-${item.Year}`),
-                            datasets: [{
-                                label: 'Revenue',
-                                data: monthlyData.map(item => item.TotalAmount),
-                                borderColor: 'rgba(75, 192, 192, 1)',
-                                borderWidth: 1,
-                                fill: false
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            scales: {
-                                x: {
-                                    beginAtZero: true
-                                }
-                            }
-                        }
-                    });
-                </script>
-            </div>
-        </div>
+    <div>
+        <canvas id="monthlyChart"></canvas>
+        <canvas id="annualChart"></canvas>
+        <canvas id="topPlansChart"></canvas>
+        <canvas id="paymentsChart"></canvas>
+        <canvas id="usersChart"></canvas>
+        <canvas id="testimonialsChart"></canvas>
     </div>
-</div>
 
-<div class="row">
-    <!-- Annual Report Chart -->
-    <div class="col-md-12 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <p class="card-title">Annual Subscription Report</p>
-                <canvas id="annualChart"></canvas>
-                <script>
-                    var ctx = document.getElementById('annualChart').getContext('2d');
-                    var annualData = @Html.Raw(Json.Serialize(Model.AnnualSubscriptionReport));
+    <script>
+        // Monthly Subscription Report (Line Chart)
+        const monthlyLabels = @Html.Raw(Json.Serialize(Model.MonthlySubscriptionReport.Select(item => $"{item.Month}-{item.Year}")));
+        const monthlyData = @Html.Raw(Json.Serialize(Model.MonthlySubscriptionReport.Select(item => item.TotalAmount)));
+        const monthlyChartConfig = {
+            type: 'line',
+            data: {
+                labels: monthlyLabels,
+                datasets: [{
+                    label: 'Monthly Revenue',
+                    data: monthlyData,
+                    fill: false,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'top' },
+                    title: { display: true, text: 'Monthly Subscription Revenue' }
+                },
+                scales: {
+                    x: { beginAtZero: true },
+                    y: { beginAtZero: true }
+                }
+            }
+        };
+        const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+        new Chart(monthlyCtx, monthlyChartConfig);
 
-                    var chart = new Chart(ctx, {
-                        type: 'bar',
-                        data: {
-                            labels: annualData.map(item => item.Year),
-                            datasets: [{
-                                label: 'Revenue',
-                                data: annualData.map(item => item.TotalAmount),
-                                backgroundColor: 'rgba(153, 102, 255, 0.2)',
-                                borderColor: 'rgba(153, 102, 255, 1)',
-                                borderWidth: 1
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            scales: {
-                                y: {
-                                    beginAtZero: true
-                                }
-                            }
-                        }
-                    });
-                </script>
-            </div>
-        </div>
-    </div>
-</div>
+        // Repeat similar blocks for other charts...
+    </script>
+
 
 <div class="row">
     <!-- Top Plans Table -->
@@ -145,7 +116,6 @@
                             <tr>
                                 <th>Title</th>
                                 <th>Rate</th>
-                                <th>Trainer Name</th>
                                 <th>User Name</th>
                                 <th>Created Time</th>
                             </tr>
@@ -156,7 +126,6 @@
                                 <tr>
                                     <td>@item.Text</td>
                                     <td class="font-weight-bold">@item.Rate</td>
-                                    <td>@item.Trainer.UserName</td>
                                     <td class="font-weight-medium">
                                         <div class="badge badge-success">@item.User.UserName</div>
                                     </td>

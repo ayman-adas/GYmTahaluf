@@ -18,13 +18,16 @@ namespace GYM.Controllers
 
         public IActionResult Index()
         {
-             var testomonials=_context.Testimonials.ToList();
-            var trainers=_context.Users.Where(x=>x.RoleId==2).ToList();
+             var plans = _context.SubscriptionPlans.ToList();
+            var contact = _context.Contacts.FirstOrDefault();
+
+            var testimonial = _context.Testimonials.Where(x=>x.Isapproved==true).ToList();
             // Create a ViewModel to hold both collections
             var results = new TestimonialTrainerViewModel
             {
-                Testimonials = testomonials,
-                Trainers = trainers
+                Plans = plans,
+                Testimonial = testimonial,
+                Contact=contact
             }; return View(results);
         }
 
@@ -35,6 +38,23 @@ namespace GYM.Controllers
         public IActionResult Admin()
         {
             return View();
+        }
+        public IActionResult MemberHome(int?userId)
+        {
+            var plans = _context.SubscriptionPlans.ToList();
+            var contact = _context.Contacts.FirstOrDefault();
+            var user = _context.Users.Where(x => x.Id == userId).FirstOrDefault();
+            var trainners = _context.Users.Where(x => x.RoleId == 2).ToList();
+            // Create a ViewModel to hold both collections
+            var exercises=_context.Exercises.ToList();
+            var results = new MemberModel
+            {
+                User = user,
+                Contact = contact,
+                Trainners = trainners,
+                Plans = plans,
+                Exercises = exercises
+            }; return View(results);
         }
 
 

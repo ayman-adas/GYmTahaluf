@@ -10,7 +10,39 @@ public class TestimonialController : Controller
     {
         _context = context;
     }
+    [HttpPost]
+    public async Task<IActionResult> Create(Testimonial testimonial)
+    {
+        // Ensure the Testimonial object is valid and contains the required data
+        if (testimonial == null)
+        {
+            return BadRequest("Testimonial data is missing.");
+        }
 
+        // Set the rated time and save the testimonial
+        testimonial.RatedTime = DateTime.Now;
+
+        if (testimonial.imageFile != null)
+        {
+            // Process the image upload if any
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", testimonial.imageFile.FileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await testimonial.imageFile.CopyToAsync(stream);
+            }
+
+            // Save the image file name in the database
+            testimonial.Image = testimonial.imageFile.FileName; // Assign file name to the Image property
+        }
+
+        // Add the testimonial to the context
+        _context.Add(testimonial);
+        await _context.SaveChangesAsync();
+
+        // Redirect to the MemberHome page
+        return RedirectToAction("MemberHome", "Home", new { userId = testimonial.UserId });
+    }
     // Index - Show all testimonials
     public IActionResult Index()
     {
