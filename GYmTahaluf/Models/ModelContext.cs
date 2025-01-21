@@ -242,7 +242,7 @@ public partial class ModelContext : DbContext
                 .HasColumnType("CLOB")
                 .HasColumnName("CONTENT");
             entity.Property(e => e.Image)
-                .HasColumnType("BLOB")
+                .HasColumnType("CLOB")
                 .HasColumnName("IMAGE");
             entity.Property(e => e.Name)
                 .HasMaxLength(255)

@@ -9,20 +9,20 @@
 
 <h1>Create Page</h1>
 
-<form asp-action="Create">
+<form asp-action="Create" method="post">
     <div class="form-group">
         <label asp-for="Title" class="control-label">Page Title</label>
-        <input asp-for="Title" class="form-control" required />
+        <input asp-for="Title" class="form-control" name="Title" required />
         <span asp-validation-for="Title" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="Name" class="control-label">Page Name</label>
-        <input asp-for="Name" class="form-control" required />
+        <input asp-for="Name" class="form-control" name="Name" required />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="Content" class="control-label">Content</label>
-        <textarea asp-for="Content" class="form-control"></textarea>
+        <textarea asp-for="Content" class="form-control" name="Content"></textarea>
         <span asp-validation-for="Content" class="text-danger"></span>
     </div>
     <div class="form-group">

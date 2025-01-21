@@ -1,8 +1,14 @@
-﻿@model DashboardViewModel
+﻿
+@model DashboardViewModel
 @{
     Layout = "~/Views/Shared/AdminLayout.cshtml";
-
 }
+<style>
+    h1 {
+        text-align: center; 
+        margin-bottom: 20px; 
+    }
+</style>
 <div class="row">
     <!-- Statistics Section -->
     <div class="col-md-4 grid-margin stretch-card">
@@ -24,17 +30,25 @@
         </div>
     </div>
 
-
     <div>
-        <canvas id="monthlyChart"></canvas>
+        <h1>Annual amount</h1>
         <canvas id="annualChart"></canvas>
+        <h1>monthly amount</h1>
+
+        <canvas id="monthlyChart"></canvas>
+        <h1>Top plans frequantly</h1>
+
         <canvas id="topPlansChart"></canvas>
+        <h1>plans have  amount</h1>
+
         <canvas id="paymentsChart"></canvas>
         <canvas id="usersChart"></canvas>
         <canvas id="testimonialsChart"></canvas>
     </div>
+</div>
 
-    <script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
         // Monthly Subscription Report (Line Chart)
         const monthlyLabels = @Html.Raw(Json.Serialize(Model.MonthlySubscriptionReport.Select(item => $"{item.Month}-{item.Year}")));
         const monthlyData = @Html.Raw(Json.Serialize(Model.MonthlySubscriptionReport.Select(item => item.TotalAmount)));
@@ -66,13 +80,125 @@
         const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
         new Chart(monthlyCtx, monthlyChartConfig);
 
-        // Repeat similar blocks for other charts...
-    </script>
+        // Annual Subscription Report (Bar Chart)
+        const annualLabels = @Html.Raw(Json.Serialize(Model.AnnualSubscriptionReport.Select(item => item.Year)));
+        const annualData = @Html.Raw(Json.Serialize(Model.AnnualSubscriptionReport.Select(item => item.TotalAmount)));
+        const annualChartConfig = {
+            type: 'bar',
+            data: {
+                labels: annualLabels,
+                datasets: [{
+                    label: 'Annual Revenue',
+                    data: annualData,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'top' },
+                    title: { display: true, text: 'Annual Subscription Revenue' }
+                },
+                scales: {
+                    x: { beginAtZero: true },
+                    y: { beginAtZero: true }
+                }
+            }
+        };
+        const annualCtx = document.getElementById('annualChart').getContext('2d');
+        new Chart(annualCtx, annualChartConfig);
 
+        // Top Plans Report (Pie Chart)
+        const topPlansLabels = @Html.Raw(Json.Serialize(Model.Item1
+            .Select(item => item.Title)));
+        const topPlansData = @Html.Raw(Json.Serialize(Model.Item1.Select(item => item.Price)));
+        const topPlansChartConfig = {
+            type: 'pie',
+            data: {
+                labels: topPlansLabels,
+                datasets: [{
+                    label: 'Top Plans',
+                    data: topPlansData,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'top' },
+                    title: { display: true, text: 'Top Plans' }
+                }
+            }
+        };
+        const topPlansCtx = document.getElementById('topPlansChart').getContext('2d');
+        new Chart(topPlansCtx, topPlansChartConfig);
+
+        // Payments Report (Doughnut Chart)
+        const paymentsLabels = @Html.Raw(Json.Serialize(Model.Item2.Select(item => item.Plan.Title)));
+        const paymentsData = @Html.Raw(Json.Serialize(Model.Item2.Select(item => item.Amount)));
+        const paymentsChartConfig = {
+            type: 'doughnut',
+            data: {
+                labels: paymentsLabels,
+                datasets: [{
+                    label: 'Payments',
+                    data: paymentsData,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'top' },
+                    title: { display: true, text: 'Payments' }
+                }
+            }
+        };
+        const paymentsCtx = document.getElementById('paymentsChart').getContext('2d');
+        new Chart(paymentsCtx, paymentsChartConfig);
+
+        
+    
+    });
+</script>
 
 <div class="row">
     <!-- Top Plans Table -->
-    <div class="col-md-7 grid-margin stretch-card">
+    <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
                 <p class="card-title mb-0">Top Plans</p>
@@ -105,11 +231,11 @@
         </div>
     </div>
 
-    <!-- Tostominals Table -->
+    <!-- Testimonials Table -->
     <div class="col-md-7 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <p class="card-title mb-0">Tostominals</p>
+                <p class="card-title mb-0">Testimonials</p>
                 <div class="table-responsive">
                     <table class="table table-striped table-borderless">
                         <thead>

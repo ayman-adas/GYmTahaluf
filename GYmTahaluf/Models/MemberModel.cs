@@ -11,7 +11,12 @@
         }
         public List<Exercise>Exercises { get; set; }
         public List<SubscriptionPlan> Plans;
+        public List<SubscriptionPlan> SubscripedPlan;
+
         public Contact Contact { get; set; }
+        public Page About { get; set; }
+        public Page Home { get; set; }
+
         public Testimonial Testimonial { get; set; }
         public MemberModel() { }
         public MemberModel(User user, Contact contact, List<User> trainners,List<SubscriptionPlan>plans,List<Exercise>exercises)

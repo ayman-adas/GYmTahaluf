@@ -1,6 +1,7 @@
 ﻿@model TrainerDashboard
 @{
     Layout = "~/Views/Shared/TrainnerLayout.cshtml";
+    ViewBag.UserId = ViewBag.UserId;
 
 }
 <div class="row">
@@ -26,8 +27,8 @@
 
     <div class="row">
         <!-- Top Plans Table -->
-        <div class="col-md-7 grid-margin stretch-card">
-            <div class="card">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
                 <div class="card-body">
                     <p class="card-title mb-0">Top Plans</p>
                     <div class="table-responsive">
@@ -36,7 +37,6 @@
                                 <tr>
                                     <th>Plan Title</th>
                                     <th>Price</th>
-                                    <th>Trainer Name</th>
                                     <th>Description</th>
                                 </tr>
                             </thead>

@@ -45,6 +45,10 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
 
+                            <a class="dropdown-item" asp-action="Edit" asp-controller="Users" asp-route-id="@ViewBag.UserId">
+                                <i class="ti-power-off text-primary"></i>
+                                Update
+                            </a>
                             <a class="dropdown-item" asp-controller="Users" asp-action="LoginPage">
                                 <i class="ti-power-off text-primary"></i>
                                 Logout
@@ -235,13 +239,13 @@
             <nav class="sidebar sidebar-offcanvas" id="sidebar">
                 <ul class="nav">
                     <li class="nav-item">
-                        <a class="nav-link" asp-controller="TrainnerControllers" asp-action="index">
+                        <a class="nav-link" asp-controller="TrainnerControllers" asp-action="index" asp-route-userId="@ViewBag.UserId">
                             <i class="icon-grid menu-icon"></i>
                             <span class="menu-title">Dashboard</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-controller="TrainnerControllers" asp-action="Search">
+                        <a class="nav-link" asp-controller="TrainnerControllers" asp-action="Search" asp-route-userId="@ViewBag.UserId">
                             <i class="icon-grid menu-icon"></i>
                             <span class="menu-title">Report</span>
                         </a>
@@ -254,11 +258,29 @@
                         <div class="collapse" id="ui-basic">
                             <div class="collapse" id="ui-basic">
                                 <ul class="nav flex-column sub-menu">
-                                    <li class="nav-item"> <a class="nav-link" asp-controller="SubscriptionPlan" asp-action="create">create</a></li>
+                                    <li class="nav-item"> <a class="nav-link" asp-controller="SubscriptionPlan" asp-action="create" asp-route-userId="@ViewBag.UserId">create</a></li>
+                                    <li class="nav-item"> <a class="nav-link" asp-controller="SubscriptionPlan" asp-action="View1" asp-route-userId="@ViewBag.UserId">View</a></li>
+
                                 </ul>
                             </div>
+
                     </li>
-                 
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+                            <i class="icon-layout menu-icon"></i>
+                            <span class="menu-title"><button> Exercises </button></span>
+                        </a>
+                        <div class="collapse" id="ui-basic">
+                            <div class="collapse" id="ui-basic">
+                                <ul class="nav flex-column sub-menu">
+                                    <li class="nav-item"> <a class="nav-link" asp-controller="Exercises" asp-action="create" asp-route-userId="@ViewBag.UserId">create</a></li>
+                                    <li class="nav-item"> <a class="nav-link" asp-controller="Exercises" asp-action="index" asp-route-userId="@ViewBag.UserId">index</a></li>
+
+                                </ul>
+                            </div>
+
+                    </li>
+
                 </ul>
             </nav>
             <div class="main-panel">

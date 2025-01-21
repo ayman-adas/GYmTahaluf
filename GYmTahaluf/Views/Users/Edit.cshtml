@@ -4,44 +4,114 @@
     ViewData["Title"] = "Edit User";
     Layout = null;
 }
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
-<div class="container mt-5">
-    <div class="card shadow p-4">
-        <h2 class="text-center text-primary mb-4">Edit User</h2>
-        <hr />
+</head>
+<style>
+    body {
+        background: linear-gradient(to right, #ff7e5f, #feb47b); 
+        font-family: 'Poppins', sans-serif;
+        color: #fff;
+    }
+
+    .card {
+        background-color: #fff;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-control {
+        border-radius: 10px;
+        border: 2px solid #f7d7c4; 
+    }
+
+        .form-control:focus {
+            border-color: #ff7e5f; 
+            box-shadow: 0 0 5px rgba(106, 17, 203, 0.5);
+        }
+
+   
+    .btn-gradient {
+        background: linear-gradient(to right, #ff7e5f, #feb47b); 
+        border: none;
+        color: #fff;
+        padding: 10px 20px;
+        font-size: 18px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+    }
+
+        .btn-gradient:hover {
+            background: linear-gradient(to right, #feb47b, #ff7e5f);
+            box-shadow: 0 5px 15px rgba(37, 117, 252, 0.4);
+        }
+
+    h2 {
+        font-weight: bold;
+        color: #ff7e5f; }
+
+    hr {
+        border: 0;
+        border-top: 2px solid #6a11cb;
+        width: 50%;
+        margin: 0 auto 30px;
+    }
+
+</style>
+<body><div class="container mt-5">
+    <div class="card shadow-lg p-5 border-0 rounded-5">
+        <h2 class="text-center  mb-4 fw-bold">Edit User</h2>
+        <hr class="mb-4" />
         <div class="row justify-content-center">
-            <div class="col-md-6">
+            <div class="col-lg-6">
                 <form asp-action="Edit" class="needs-validation" novalidate>
-                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger d-none" role="alert"></div>
                     <input type="hidden" asp-for="Id" />
 
-                    <!-- Username -->
-                    <div class="form-group mb-3">
-                        <label asp-for="UserName" class="form-label font-weight-bold">Username</label>
-                        <input asp-for="UserName" class="form-control" placeholder="Enter username" />
+                    <div class="form-floating mb-4">
+                        <input asp-for="UserName"
+                               name="UserName"
+                               class="form-control shadow-sm"
+                               id="floatingUsername"
+                               placeholder="Enter username"
+                               required />
+                        <label for="floatingUsername"><i class="fa fa-user me-2"></i>Username</label>
+                        <div class="invalid-feedback">Please enter a valid username.</div>
                     </div>
 
-                    <!-- Save Button -->
+                    <div class="form-floating mb-4">
+                        <input asp-for="Password"
+                               name="Password"
+                               type="password"
+                               class="form-control shadow-sm"
+                               id="floatingPassword"
+                               placeholder="Enter Password"
+                               required />
+                        <label for="floatingPassword"><i class="fa fa-lock me-2"></i>Password</label>
+                        <div class="invalid-feedback">Please enter a valid password.</div>
+                    </div>
+
                     <div class="d-grid">
-                        <button type="submit" class="btn btn-primary btn-lg">
+                        <button type="submit" class="btn btn-gradient btn-lg shadow-lg">
                             Save Changes
                         </button>
                     </div>
                 </form>
             </div>
         </div>
-       
     </div>
 </div>
-
+</body>
 @section Scripts {
     <script>
-        // Custom Bootstrap validation
         (function () {
             'use strict';
             window.addEventListener('load', function () {
                 var forms = document.getElementsByClassName('needs-validation');
-                var validation = Array.prototype.filter.call(forms, function (form) {
+                Array.prototype.filter.call(forms, function (form) {
                     form.addEventListener('submit', function (event) {
                         if (form.checkValidity() === false) {
                             event.preventDefault();
@@ -53,4 +123,6 @@
             }, false);
         })();
     </script>
+
+   
 }

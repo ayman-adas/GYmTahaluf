@@ -13,7 +13,7 @@ public partial class Page
 
     public string? Content { get; set; }
 
-    public byte[]? Image { get; set; }
+    public String? Image { get; set; }
 
     public DateTime? UpdatedAt { get; set; }
 }

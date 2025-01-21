@@ -27,12 +27,15 @@ namespace GYmTahaluf.Controllers
                 Members = members,
                 TotalPayment = totalPayment
             };
+            ViewBag.UserId=userId;
             return View(result);
         }
 
-        public IActionResult Search()
+        public IActionResult Search(int? userId)
         {
-            var result = _context.SubscriptionPlans.Include(x => x.Trainer).Include(x => x.Payments).ToList();
+            ViewBag.UserId = userId;
+
+            var result = _context.SubscriptionPlans.Where(x=>x.TrainerId== userId).Include(x => x.Trainer).Include(x => x.Payments).ToList();
             return View(result);
         }
     }

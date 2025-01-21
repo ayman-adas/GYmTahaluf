@@ -39,8 +39,7 @@ public class PageController : Controller
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Id,Title,Content")] Page page)
+    public async Task<IActionResult> Create([Bind("Id,Title,Name,Content")] Page page)
     {
         if (ModelState.IsValid)
         {
@@ -68,34 +67,33 @@ public class PageController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(decimal id, [Bind("Id,Title,Content")] Page page)
+    public async Task<IActionResult> Edit(decimal id, [Bind("Title,Name,Content")] Page page)
     {
-        if (id != page.Id)
-        {
-            return NotFound();
-        }
 
-        if (ModelState.IsValid)
+
+        try
         {
-            try
-            {
-                _context.Update(page);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PageExists(page.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-            return RedirectToAction(nameof(Index));
+            var Page = _context.Pages.Where(x => x.Id == id).First();
+            Page.Title = page.Title;
+            Page.Content = page.Content;
+            Page.Name = page.Name;
+            _context.Update(Page);
+            await _context.SaveChangesAsync();
         }
-        return View(page);
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!PageExists(page.Id))
+            {
+                return NotFound();
+            }
+            else
+            {
+                throw;
+            }
+
+        }
+        return View("Index");
+
     }
 
     public async Task<IActionResult> Delete(decimal? id)

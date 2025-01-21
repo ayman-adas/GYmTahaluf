@@ -2,39 +2,41 @@
 
 @{
     ViewData["Title"] = "Create Promocode";
+    Layout = null;
+
 }
 
 <h1>Create Promocode</h1>
 
-<form method="post">
+<form method="post" action="Create">
     <div class="form-group">
         <label for="Code">Code</label>
-        <input type="text" name="Code" class="form-control" required />
+        <input type="text" name="Code" asp-for="Code" class="form-control" required />
     </div>
 
     <div class="form-group">
         <label for="Percent">Percent</label>
-        <input type="number" name="Percent" class="form-control" />
+        <input type="number" name="Percent" asp-for="Percent" class="form-control" />
     </div>
 
     <div class="form-group">
         <label for="EndDate">End Date</label>
-        <input type="date" name="EndDate" class="form-control" />
+        <input type="date" name="EndDate" asp-for="EndDate" class="form-control" />
     </div>
 
     <div class="form-group">
         <label for="Isvisible">Is Visible</label>
-        <input type="checkbox" name="Isvisible" class="form-check-input" />
+        <input type="checkbox" name="Isvisible" asp-for="Isvisible" class="form-check-input" />
     </div>
 
     <div class="form-group">
         <label for="MinAmount">Min Amount</label>
-        <input type="number" name="MinAmount" class="form-control" />
+        <input type="number" name="MinAmount" asp-for="MinAmount" class="form-control" />
     </div>
 
     <div class="form-group">
         <label for="MaxUses">Max Uses</label>
-        <input type="number" name="MaxUses" class="form-control" />
+        <input type="number" name="MaxUses" asp-for="MaxUses" class="form-control" />
     </div>
 
     <button type="submit" class="btn btn-primary">Create</button>

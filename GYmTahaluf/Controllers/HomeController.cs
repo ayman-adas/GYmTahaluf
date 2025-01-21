@@ -20,14 +20,20 @@ namespace GYM.Controllers
         {
              var plans = _context.SubscriptionPlans.ToList();
             var contact = _context.Contacts.FirstOrDefault();
-
+            var home=_context.Pages.Where(x=>x.Title == "Home Page").FirstOrDefault();
             var testimonial = _context.Testimonials.Where(x=>x.Isapproved==true).ToList();
+            var exercises = _context.Exercises.ToList();
+            var about = _context.Pages.Where(x => x.Name == "about").First();
+
             // Create a ViewModel to hold both collections
             var results = new TestimonialTrainerViewModel
             {
+                Home=home,
+                About = about,
                 Plans = plans,
                 Testimonial = testimonial,
-                Contact=contact
+                Contact=contact,
+                Exercise=exercises
             }; return View(results);
         }
 
@@ -42,18 +48,25 @@ namespace GYM.Controllers
         public IActionResult MemberHome(int?userId)
         {
             var plans = _context.SubscriptionPlans.ToList();
+            var myPlans = _context.SubscriptionPlans
+                .Where(x => x.Schedules.Any(y => y.UserId == userId))
+                .ToList();
             var contact = _context.Contacts.FirstOrDefault();
             var user = _context.Users.Where(x => x.Id == userId).FirstOrDefault();
             var trainners = _context.Users.Where(x => x.RoleId == 2).ToList();
             // Create a ViewModel to hold both collections
             var exercises=_context.Exercises.ToList();
+            var about=_context.Pages.Where(x=>x.Name=="about").First();
+            var home=_context.Pages.Where(x=>x.Title== "Member Home").FirstOrDefault();  
             var results = new MemberModel
-            {
+            {About = about,
                 User = user,
+                Home=home,
                 Contact = contact,
                 Trainners = trainners,
                 Plans = plans,
-                Exercises = exercises
+                Exercises = exercises,
+                SubscripedPlan=myPlans
             }; return View(results);
         }
 

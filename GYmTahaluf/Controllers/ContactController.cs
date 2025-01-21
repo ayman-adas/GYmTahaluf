@@ -72,19 +72,16 @@ public class ContactController : Controller
     // POST: Contact/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Edit(decimal id, [Bind("Id,Email,Insta,Facebook,Phone")] Contact contact)
+    public IActionResult Edit(decimal Id, [Bind("Email,Insta,Facebook,Phone")] Contact contact)
     {
-        if (id != contact.Id)
-        {
-            return NotFound();
-        }
+   
 
         if (ModelState.IsValid)
         {
             try
             {
                 // Update the contact details
-                var existingContact = _context.Contacts.FirstOrDefault(c => c.Id == id);
+                var existingContact = _context.Contacts.FirstOrDefault(c => c.Id == Id);
                 if (existingContact != null)
                 {
                     existingContact.Email = contact.Email;
@@ -92,10 +89,14 @@ public class ContactController : Controller
                     existingContact.Facebook = contact.Facebook;
                     existingContact.Phone = contact.Phone;
                 }
+                _context.Update(existingContact);
+                _context.SaveChanges(); 
             }
+            
+
             catch (DbUpdateConcurrencyException)
             {
-                if (!_context.Contacts.Any(c => c.Id == id))
+                if (!_context.Contacts.Any(c => c.Id == Id))
                 {
                     return NotFound();
                 }

@@ -41,10 +41,21 @@ public class UsersController : Controller
     {
 
         // Retrieve all roles from the database
-        var roles = _context.Roles.Select(r => new { r.Id, r.RoleName }).ToList();
+        var roles = _context.Roles.ToList();
 
         // Assign the roles to the ViewBag for use in the view
-        ViewBag.Roles = new SelectList(roles, "Id", "RoleName"); return View();
+        if (roles != null && roles.Any())
+        {
+            // Assign the roles to ViewBag
+            ViewBag.Roles = roles;
+        }
+        else
+        {
+            // Handle the case where there are no roles
+            ViewBag.Roles = new List<Role>();
+        }
+        User user = new User();
+        return View(user);
     }
     public IActionResult LoginPage()
     {
@@ -53,77 +64,82 @@ public class UsersController : Controller
     [HttpPost]
     public async Task<IActionResult> Register([Bind("UserName,Email,ImagePath,imageFile,Password")] User user)
     {
-        
 
 
-            if (user.imageFile != null)
+
+        if (user.imageFile != null)
+        {
+            string wwwRootPath = _webHostEnviroment.WebRootPath; //C:\Users\d.kanaan.ext\Desktop\ResturantMVC\ResturantMVC\wwwroot\
+            string fileName = Guid.NewGuid().ToString() + "_" + user.imageFile.FileName;
+            string path = Path.Combine(wwwRootPath + "/Images/", fileName);
+
+
+
+            using (var fileStream = new FileStream(path, FileMode.Create))
             {
-                string wwwRootPath = _webHostEnviroment.WebRootPath; //C:\Users\d.kanaan.ext\Desktop\ResturantMVC\ResturantMVC\wwwroot\
-                string fileName = Guid.NewGuid().ToString() + "_" + user.imageFile.FileName;
-                string path = Path.Combine(wwwRootPath + "/Images/", fileName);
-
-
-
-                using (var fileStream = new FileStream(path, FileMode.Create))
-                {
-                    await user.imageFile.CopyToAsync(fileStream);
-
-
-
-                }
-                user.UserImage = fileName;
-
-
+                await user.imageFile.CopyToAsync(fileStream);
 
 
 
             }
+            user.UserImage = fileName;
+
+
+
+
+
+        }
 
 
 
         Console.WriteLine(user.Email);
-            User login = new User();
-            login.UserName = user.UserName;
-            login.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+        User login = new User();
+        login.UserName = user.UserName;
+        login.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
         login.Email = user.Email;
-            login.RoleId = 3;
-            login.CreatedAt = DateTime.Now;
-            login.UpdateAt = DateTime.Now;
-            login.LastLogin= DateTime.Now;
-            _context.Add(login);
-            await _context.SaveChangesAsync();
+        login.RoleId = 3;
+        login.CreatedAt = DateTime.Now;
+        login.UpdateAt = DateTime.Now;
+        login.LastLogin = DateTime.Now;
+        _context.Add(login);
+        await _context.SaveChangesAsync();
 
-            return RedirectToAction("LoginPage");
-    
+        return RedirectToAction("LoginPage");
+
     }
     [HttpPost]
-	public IActionResult Login(string Email,string Password)
+    public IActionResult Login(string Email, string Password)
 
-	{
+    {
 
-        var auth = _context.Users.Single(x => x.Email ==Email);
+        var auth = _context.Users.Single(x => x.Email == Email);
 
-        if ( BCrypt.Net.BCrypt.Verify(Password, auth.Password))
+        if (BCrypt.Net.BCrypt.Verify(Password, auth.Password))
 
-		{ // 1 > customer
+        { // 1 > customer
 
-			// 2 > admin
+            // 2 > admin
 
-			// 3 > employee
+            // 3 > employee
 
-			switch (auth.RoleId)
+            switch (auth.RoleId)
 
-			{
+            {
 
-				case 1:
 
-					HttpContext.Session.SetString("AdminName",
-					auth.UserName);
+                case 1:
 
-					return RedirectToAction("Index", "Admin");
+                    HttpContext.Session.SetString("AdminName",
+                    auth.UserName);
 
-				case 3:
-					HttpContext.Session.SetInt32("MemberId", (int)auth.Id);
+                    return RedirectToAction("Index", "Admin");
+
+                case 2:
+                    HttpContext.Session.SetInt32("TrainnerId", (int)auth.Id);
+                    return RedirectToAction("Index", "TrainnerControllers" ,new { userId = auth.Id });
+
+                case 3:
+                    HttpContext.Session.SetInt32("MemberId", (int)auth.Id);
 
                     return RedirectToAction("MemberHome", "Home", new { userId = auth.Id });
 
@@ -137,17 +153,50 @@ public class UsersController : Controller
 
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Id,Username,Email,Password,RoleId")] User user)
+    public async Task<IActionResult> Create([Bind("UserName,Email,ImagePath,imageFile,Password,RoleId")] User user)
     {
-        if (ModelState.IsValid)
+
+
+
+        if (user.imageFile != null)
         {
-            user.Password= BCrypt.Net.BCrypt.HashPassword(user.Password);
-            _context.Add(user);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            string wwwRootPath = _webHostEnviroment.WebRootPath; //C:\Users\d.kanaan.ext\Desktop\ResturantMVC\ResturantMVC\wwwroot\
+            string fileName = Guid.NewGuid().ToString() + "_" + user.imageFile.FileName;
+            string path = Path.Combine(wwwRootPath + "/Images/", fileName);
+
+
+
+            using (var fileStream = new FileStream(path, FileMode.Create))
+            {
+                await user.imageFile.CopyToAsync(fileStream);
+
+
+
+            }
+            user.UserImage = fileName;
+
+
+
+
+
         }
-        return View(user);
+
+
+
+        Console.WriteLine(user.Email);
+        User login = new User();
+        login.UserName = user.UserName;
+        login.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+        login.Email = user.Email;
+        login.RoleId = user.RoleId;
+        login.CreatedAt = DateTime.Now;
+        login.UpdateAt = DateTime.Now;
+        login.LastLogin = DateTime.Now;
+        _context.Add(login);
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction("Index", "Admin");
+
     }
 
     public async Task<IActionResult> Edit(decimal? id)
@@ -156,53 +205,62 @@ public class UsersController : Controller
         {
             return NotFound();
         }
-
-        var user = await _context.Users.FindAsync(id);
-        if (user == null)
+        if (id == -1)
         {
-            return NotFound();
+            var user = await _context.Users.FindAsync(Convert.ToDecimal( HttpContext.Session.GetInt32("TrainnerId")));
+            return View(user);
         }
-        return View(user);
+
+
+        else
+        {
+            var user = await _context.Users.FindAsync(id);
+            return View(user);
+        }
     }
+
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(decimal id, [Bind("Id,Username,Email,Password,RoleId")] User user)
+    public async Task<IActionResult> Edit(decimal id, String?UserName,String?Password)
     {
-        if (id != user.Id)
-        {
-            return NotFound();
-        }
+
 
         if (ModelState.IsValid)
         {
-            try
-            {
-                var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
-                if (existingUser.Password != user.Password) {
-                    user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
 
-                }
-                _context.Update(user);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
+            var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            if (existingUser.Password != Password && Password!=null)
             {
-                if (!UserExists(user.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }   
+                Password = BCrypt.Net.BCrypt.HashPassword(Password);
+                existingUser.Password = Password;
+
+
             }
-            return RedirectToAction(nameof(Index));
-        }
-        return View(user);
+            if (UserName != null) {
+                existingUser.UserName = UserName;
+
+            }
+            existingUser.UpdateAt = DateTime.UtcNow;
+
+            _context.Update(existingUser);
+            await _context.SaveChangesAsync();
+
+
+
+        }    var user = _context.Users.Where(x => x.Id == id).First();
+
+          if(user.RoleId==2)
+            return RedirectToAction("Index", "TrainnerControllers", new { userId = id });
+
+       
+
+            return RedirectToAction("MemberHome", "Home", new { userId =id});
+
+        
     }
 
-    public async Task<IActionResult> Delete(decimal? id)
+        public async Task<IActionResult> Delete(decimal? id)
     {
         if (id == null)
         {

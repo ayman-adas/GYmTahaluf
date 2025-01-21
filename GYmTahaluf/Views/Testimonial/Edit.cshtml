@@ -9,23 +9,12 @@
 <hr />
 <div class="row">
     <div class="col-md-6">
-        <form asp-action="Edit">
+        <form asp-action="Edit" method="post">
             <input type="hidden" asp-for="Id" />
+            
             <div class="form-group">
-                <label asp-for="User.UserName" class="control-label">User</label>
-                <input asp-for="User.UserName" class="form-control" readonly />
-            </div>
-            <div class="form-group">
-                <label asp-for="Rate" class="control-label">Rate</label>
-                <input asp-for="Rate" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label asp-for="Text" class="control-label">Text</label>
-                <textarea asp-for="Text" class="form-control"></textarea>
-            </div>
-            <div class="form-group">
-                <label asp-for="Isadminreview" class="control-label">Admin Review</label>
-                <select asp-for="Isadminreview" class="form-control">
+                <label asp-for="Isapproved" class="control-label">Admin Review</label>
+                <select asp-for="Isapproved" class="form-control">
                     <option value="true">Approved</option>
                     <option value="false">Not Approved</option>
                 </select>

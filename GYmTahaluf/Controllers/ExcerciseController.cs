@@ -13,9 +13,11 @@ public class ExercisesController : Controller
     }
 
     // GET: Exercises
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int ?userId)
     {
-        return View(await _context.Exercises.ToListAsync());
+        ViewBag.UserId = userId;
+
+        return View(await _context.Exercises.Where(x=>x.Plan.TrainerId==userId).ToListAsync());
     }
 
     // GET: Exercises/Details/5
@@ -37,23 +39,40 @@ public class ExercisesController : Controller
     }
 
     // GET: Exercises/Create
-    public IActionResult Create()
+    public IActionResult Create(int? userId)
     {
+        if (userId == null)
+        {
+            return BadRequest("User ID is required.");
+        }
+
+        ViewBag.UserId = userId;
+
+        // Create a list of SelectListItem for the dropdown
+        ViewBag.PlanId = _context.SubscriptionPlans
+            .Where(x => x.TrainerId == userId)
+            .Select(x => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+            {
+                Value = x.Id.ToString(), // Ensure x.Id is of type int or cast it to string
+                Text = x.Id.ToString()  // Replace with a meaningful display name if available
+            })
+            .ToList();
+
         return View();
     }
 
     // POST: Exercises/Create
     [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Id,Name,Description,Duration")] Exercise exercise)
+    public async Task<IActionResult> Create([Bind("Id,Title,Description,Repetition,RestPeriod,Difficulty,Duration,PlanId")] Exercise exercise)
     {
-        if (ModelState.IsValid)
-        {
+       
             _context.Add(exercise);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-        return View(exercise);
+
+
+
+
+        return RedirectToAction("Index", "TrainnerControllers", new { userId = exercise.Plan.TrainerId });
     }
 
     // GET: Exercises/Edit/5
@@ -64,7 +83,7 @@ public class ExercisesController : Controller
             return NotFound();
         }
 
-        var exercise = await _context.Exercises.FindAsync(id);
+        var exercise =  _context.Exercises.Where(x=>x.Id==id).First();
         if (exercise == null)
         {
             return NotFound();
@@ -75,13 +94,9 @@ public class ExercisesController : Controller
     // POST: Exercises/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Duration")] Exercise exercise)
+    public async Task<IActionResult> Edit([Bind("Id,Title,Description,Repetition,RestPeriod,Difficulty,Duration,PlanId")] Exercise exercise)
     {
-        if (id != exercise.Id)
-        {
-            return NotFound();
-        }
-
+        
         if (ModelState.IsValid)
         {
             try

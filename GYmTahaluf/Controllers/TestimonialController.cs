@@ -68,25 +68,15 @@ public class TestimonialController : Controller
         {
             return NotFound();
         }
-
-        if (ModelState.IsValid)
-        {
-            try
-            {
-                _context.Update(testimonial);
+        var testimonials= _context.Testimonials.Where(ts => ts.Id == id).SingleOrDefault ();
+        testimonials.UpdatedAt = DateTime.Now;
+        testimonials.Isadminreview =true;
+        testimonials.Isapproved = testimonial.Isapproved;
+        testimonials.Priority = testimonial.Priority;
+        _context.Update(testimonials);
                 _context.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!_context.Testimonials.Any(t => t.Id == testimonial.Id))
-                {
-                    return NotFound();
-                }
-                throw;
-            }
-            return RedirectToAction(nameof(Index));
-        }
-        return View(testimonial);
+          
+        return View("index");
     }
 
     // Details - Show testimonial details
